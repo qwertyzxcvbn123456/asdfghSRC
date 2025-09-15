@@ -45,7 +45,12 @@
             font-weight: bold;
         }
         #content {
-            height: calc(100% - 70px); /* Subtract the header height */
+            height: calc(100% - 70px); /* Subtract header height */
+        }
+        /* Set a default style for the widgetbot in case JS is disabled */
+        #widgetbot {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -53,13 +58,38 @@
     <div id="header" class="roboto-medium">Discord</div>
     <div id="content">
         <widgetbot
+            id="widgetbot"
             server="1394091297148637257"
             channel="1394091298553598064"
-            width="calc(16 / 9 * 85vh)" <!-- Width based on 16:9 aspect ratio and 85% of viewport height -->
-            height="85vh"              <!-- Height is set to 85vh -->
             style="position: absolute; left: 50%; top: calc(50% - 35px); transform: translate(-50%, -50%);"
         ></widgetbot>
-    <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
+
+    <script>
+        // Function to resize the widget based on the screen's aspect ratio
+        function resizeWidget() {
+            // Get the viewport width and height
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            // Calculate the aspect ratio of the viewport
+            const aspectRatio = viewportWidth / viewportHeight;
+
+            // Set the width and height of the widget based on the aspect ratio
+            const widget = document.getElementById('widgetbot');
+            
+            // Apply the aspect ratio to the widget's width and height
+            widget.style.width = `${Math.min(viewportWidth, viewportHeight * aspectRatio)}px`;
+            widget.style.height = `${Math.min(viewportHeight, viewportWidth / aspectRatio)}px`;
+        }
+
+        // Resize the widget when the page loads
+        window.addEventListener('load', resizeWidget);
+
+        // Resize the widget when the window is resized
+        window.addEventListener('resize', resizeWidget);
+    </script>
 </body>
 </html>
